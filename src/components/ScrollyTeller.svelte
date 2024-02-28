@@ -8,7 +8,6 @@
 
 <div class="container">
   <div class="right-panel">
-    <p>Words frequency appear in each's tweets</p>
     <section class="centered-content">
       graph
     </section>
