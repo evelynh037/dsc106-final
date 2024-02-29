@@ -2,46 +2,77 @@
   import Scroller from "@sveltejs/svelte-scroller";
   import { onMount } from 'svelte';
   import * as d3 from 'd3';
+  import Graph from "./Graph.svelte";
   let count, index, offset, progress;
   $:console.log(index)
 
-  //load data
   let hillaryData = [];
+  let trumpData = [];
+  let common_words = [];
+
+  let prefix = "no input";
+  let inputText = "";
+  //let showWarning = false;
+  let filtered_hillary;
+  let filtered_trump;
+
+  let suggest_words;
+  let top_five_words;
+  let if_empty = false;
+
+  //load data
   onMount(async () => {
     const res = await fetch('hillary_words.csv'); 
     const csv = await res.text();
     hillaryData = d3.csvParse(csv, d3.autoType)
   });
-  let trumpData = [];
   onMount(async () => {
     const res = await fetch('trump_words.csv'); 
     const csv = await res.text();
     trumpData = d3.csvParse(csv, d3.autoType)
   });
+  onMount(async () => {
+    const res = await fetch('words_in_common.csv'); 
+    const csv = await res.text();
+    common_words = d3.csvParse(csv, d3.autoType)
+  });
 
- //for searchbox, filter data 
-  let prefix = "no input";
-  let inputText = "";
-  let showWarning = false;
-  let filtered_hillary;
-  let filtered_trump;
-  function handleSubmit() {
-    if (inputText == '') {
-      showWarning = true;
-    } else {
-      prefix = inputText;
-      showWarning = false;
-      console.log(prefix)
-    }
+ //for searchbox through submit
+  // function handleSubmit() {
+  //   if (inputText == '') {
+  //     showWarning = true;
+  //   } else {
+  //     prefix = inputText;
+  //     showWarning = false;
+  //     console.log(prefix)
+  //   }
+  // }
+  // $: if (inputText != '') {
+  //     showWarning = false;
+  //   }
+
+  //suggest words
+  function handleClick(word) {
+   prefix = word;
   }
   $: filtered_hillary = hillaryData.filter((d) => d.Word == prefix.toLowerCase());
   $: filtered_trump = trumpData.filter((d) => d.Word == prefix.toLowerCase());
+  $: if (inputText !== "") {
+    suggest_words = common_words.filter((d) => String(d.Word).startsWith(inputText.toLowerCase())).slice(0, 5);
+    top_five_words = suggest_words.map(d => d.Word);
+  } else{
+    top_five_words = []
+  }
+  //check if words people search exist in common words, and output message if necessary
+  $: if_empty = inputText !== "" && top_five_words.length === 0;
+
+
 </script>
 
 
 <div class="container">
   <div class="left-panel">
-    <section>graph</section>
+    <Graph {index} {filtered_hillary} {filtered_trump}/>
   </div>
   </div>
   <div class="right-panel">
@@ -65,15 +96,25 @@
           <div>
             <div class="input-container">
               <input type="text" bind:value={inputText} placeholder="Type in a word" />
-              <button on:click={handleSubmit}>Submit</button>
+              <!-- <button on:click={handleSubmit}>Submit</button> -->
             </div>
-            
-            {#if showWarning}
+            {#if if_empty}
+            <div class="warning-message">
+              <p1>This word is not docummented</p1>
+              <br>
+              <p1>Try different one!</p1>
+            </div>
+          {/if}
+            <!-- {#if showWarning}
               <div class="warning-message">
                 <p1>Where is the word? try again :p</p1>
               </div>
-            {/if}
-            
+            {/if} -->
+            <div class="suggestions">
+              {#each top_five_words as word}
+                <button on:click={() => handleClick(word)}>{word}</button>
+              {/each}
+            </div>
           </div>
         </section>
       </div>
@@ -156,4 +197,13 @@
     line-height: 2;
     max-width: 70%;
   }
+  .suggestions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+
+
 </style>

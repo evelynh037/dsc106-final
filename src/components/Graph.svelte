@@ -1,11 +1,13 @@
 <script>
+  export let index, filtered_hillary, filtered_trump;
   
 
 </script>
 
-<svg class="graph">
+<svg width="400" height="200" class="bar-chart">
 
 </svg>
+
 
 <style>
     .graph {
