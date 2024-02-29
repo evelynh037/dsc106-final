@@ -10,7 +10,7 @@
   let trumpData = [];
   let common_words = [];
 
-  let prefix = "no input";
+  let prefix = "";
   let inputText = "";
   //let showWarning = false;
   let filtered_hillary;
@@ -54,26 +54,33 @@
   //suggest words
   function handleClick(word) {
    prefix = word;
+   inputText = word;
   }
+  //get frequency for input word
   $: filtered_hillary = hillaryData.filter((d) => d.Word == prefix.toLowerCase());
   $: filtered_trump = trumpData.filter((d) => d.Word == prefix.toLowerCase());
+  //get five suggest words when typing in
   $: if (inputText !== "") {
     suggest_words = common_words.filter((d) => String(d.Word).startsWith(inputText.toLowerCase())).slice(0, 5);
     top_five_words = suggest_words.map(d => d.Word);
   } else{
     top_five_words = []
   }
-  //check if words people search exist in common words, and output message if necessary
+  //check if words in data, and message if not
   $: if_empty = inputText !== "" && top_five_words.length === 0;
-
-
+  //if clear inputbox, clear everything
+  $: if (inputText == "") {
+    prefix = ""
+  }
 </script>
 
 
 <div class="container">
   <div class="left-panel">
-    <Graph {index} {filtered_hillary} {filtered_trump}/>
+    <div class=graph-container>
+    <Graph {index} {filtered_hillary} {filtered_trump} {prefix}{inputText}/>
   </div>
+</div>
   </div>
   <div class="right-panel">
     <Scroller
@@ -94,10 +101,15 @@
         <section class="centered-content">This is the third section.</section>
         <section class="centered-content">
           <div>
+            <div class="centered-content">
+            <p>Type in a word to see how many time it appears in each nominees' tweet</p>
+            <p>Remember, the frequency is out of ~3000 tweets for each of them. And is counting how many tweets contained the word of your choice </p>
+            <p>Take your time to explore the topic you want! </p>
             <div class="input-container">
               <input type="text" bind:value={inputText} placeholder="Type in a word" />
               <!-- <button on:click={handleSubmit}>Submit</button> -->
             </div>
+          
             {#if if_empty}
             <div class="warning-message">
               <p1>This word is not docummented</p1>
@@ -116,6 +128,7 @@
               {/each}
             </div>
           </div>
+          </div>
         </section>
       </div>
     </Scroller>
@@ -125,9 +138,6 @@
   <h1 class="sectionHeader">Campaigning on Twitter</h1>
   <p class="introText">Twitter has played an increasingly prominent role in the 2016 US Presidential Election. Debates have raged and candidates have risen and fallen based on tweets. This dataset provides approximately 3000 recent tweets from Hillary Clinton and Donald Trump, the two major-party presidential nominees.</p>
 </div>
-
-
-
 
 <style>
   .header {
@@ -180,18 +190,17 @@
   }
 
   section {
-    min-height: 100vh; 
+    min-height: 110vh; 
     color: black;
     background-color: #4ba9e380;
   }
 
   .centered-content {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-  }
-
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
   p {
     font-family: "Times New Roman", Times, serif;
     line-height: 2;
@@ -202,6 +211,9 @@
   flex-direction: column;
   gap: 10px;
   margin-top: 20px;
+}
+.graph-container {
+  margin-top: 160px; 
 }
 
 
