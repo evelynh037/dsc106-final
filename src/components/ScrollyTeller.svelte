@@ -12,7 +12,6 @@
 
   let prefix = "";
   let inputText = "";
-  //let showWarning = false;
   let filtered_hillary;
   let filtered_trump;
 
@@ -36,21 +35,6 @@
     const csv = await res.text();
     common_words = d3.csvParse(csv, d3.autoType)
   });
-
- //for searchbox through submit
-  // function handleSubmit() {
-  //   if (inputText == '') {
-  //     showWarning = true;
-  //   } else {
-  //     prefix = inputText;
-  //     showWarning = false;
-  //     console.log(prefix)
-  //   }
-  // }
-  // $: if (inputText != '') {
-  //     showWarning = false;
-  //   }
-
   //suggest words
   function handleClick(word) {
    prefix = word;
@@ -74,13 +58,10 @@
   }
 </script>
 
-
-<div class="container">
   <div class="left-panel">
     <div class=graph-container>
     <Graph {index} {filtered_hillary} {filtered_trump} {prefix}{inputText}/>
   </div>
-</div>
   </div>
   <div class="right-panel">
     <Scroller
@@ -107,21 +88,10 @@
             <p>Take your time to explore the topic you want! </p>
             <div class="input-container">
               <input type="text" bind:value={inputText} placeholder="Type in a word" />
-              <!-- <button on:click={handleSubmit}>Submit</button> -->
             </div>
-          
             {#if if_empty}
-            <div class="warning-message">
-              <p1>This word is not docummented</p1>
-              <br>
-              <p1>Try different one!</p1>
-            </div>
-          {/if}
-            <!-- {#if showWarning}
-              <div class="warning-message">
-                <p1>Where is the word? try again :p</p1>
-              </div>
-            {/if} -->
+              <p>Try different word!</p>
+            {/if}
             <div class="suggestions">
               {#each top_five_words as word}
                 <button on:click={() => handleClick(word)}>{word}</button>
@@ -164,12 +134,6 @@
     font-size: 1em;
     max-width: 50%;
   }
-  .container {
-  width:100%;
-  display: flex;
-  flex-direction: row;
-  min-height: 100vh;
-}
 
 .left-panel {
   left:0;
@@ -179,14 +143,13 @@
   width: 65%;
   background-color: rgba(95, 141, 170, 0.502);
 }
-  .right-panel {
+.right-panel {
     position: absolute;
     right: 0;
     top:60vh;
     width: 36%;
     margin-right: -1vw;
     background-color: #ffffff80;
-    height: calc(200vh);
   }
 
   section {
@@ -209,13 +172,30 @@
   .suggestions {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  margin-top: 20px;
 }
+.suggestions button {
+  width: 150px;
+  height: 25px;
+  background-color: rgb(243, 243, 251);
+  background-color: #f0f0f0; 
+  border: 0.7px solid #d0d0d0e2; 
+  font-size: 15px;
+  border-radius: 0.2em;
+}
+.suggestions button:hover {
+  opacity: 0.7;
+}
+
 .graph-container {
   margin-top: 160px; 
 }
-
-
+input {
+  width: 147px;
+  border: 1px solid #ccc;
+  padding: 9px;
+  font-size: 15px;
+  transition: width 0.2s;
+  border-radius: 1em;
+}
 
 </style>
