@@ -10,8 +10,8 @@
   let trumpData = [];
   let common_words = [];
 
-  let prefix = "";  
-  let inputText = "";
+  let prefix = "women";  
+  let inputText = "women";
   let filtered_hillary;
   let filtered_trump;
 
@@ -94,11 +94,17 @@
     >
       <div slot="foreground">
         <section class="centered-content">
-          <p>Example text: Twitter has played an increasingly prominent role in the 2016 US Presidential Election. Debates have raged and candidates have risen and fallen based on tweets. </p>
-          <p>This dataset provides approximately 3000 recent tweets from Hillary Clinton and Donald Trump, the two major-party presidential nominees.</p>
+          <p>Introduction: Twitter has played an increasingly prominent role in the 2016 US Presidential Election. Debates have raged and candidates have risen and fallen based on tweets. </p>
+          <p>This dataset provides approximately 3000 recent tweets from Hillary Clinton and Donald Trump, the two major-party presidential nominees. Follow along this article and get insights as to how the candidates' tweets refelct their electoral results.</p>
         </section>
-        <section class="centered-content">This is the second section.</section>
-        <section class="centered-content">This is the third section.</section>
+        <section class="centered-content">
+          <p>As the most symbolic campaign method, the use of slogan attracts public attention and give impression on the candidates that will influence their voting result. </p>
+          <p>In this section, we will explore some of the most frequently mentioned slogans from each candidate and analyze the frequency of their appearance in the tweets. </p>
+        </section>
+        <section class="centered-content">
+          <p>Different groups cares about different political topics. Hence, which political issue the candidates draw their focus and campaigned on more than others has an impact on whether they will receive more votes from certain groups of people.</p>
+          <p>In this section, we will explore and compare Trump's and Clinton's attention to different political topics through analyzing how often they brought up words relating to each category of political issues in their tweets.</p>
+        </section>
         <section class="centered-content">
           <div>
             <div class="centered-content">
