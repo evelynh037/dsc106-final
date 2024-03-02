@@ -1,5 +1,5 @@
 <script>
-	import { scaleBand, scaleLinear } from 'd3-scale';
+  import { scaleBand, scaleLinear } from 'd3-scale';
   export let index, filtered_trump,filtered_hillary,prefix,inputText;
   let width = 500;
 	let height = 220;
@@ -10,8 +10,17 @@
     ...filtered_hillary.map(d => ({ ...d, category: 'Hillary' })),
     ...filtered_trump.map(d => ({ ...d, category: 'Trump' }))
   ];
+
   //get the larger frequency for y-axis
-  $:maxFrequency = Math.max(...combinedData.map(d => d.Frequency))
+  $: maxFrequency = Math.max(...combinedData.map(d => d.Frequency))
+  $: totalFrequency = combinedData.reduce((acc, d) => acc + d.Frequency, 0);
+  $: relativeFrequency = combinedData.map(d => ({
+    ...d,
+    percentage: (d.Frequency / totalFrequency) * 100
+  }));
+  //$: console.log(relativeFrequency)
+
+  
 
   function generateYTicks(maxFrequency, step) {
     const ticks = [];
@@ -21,6 +30,7 @@
     return ticks;
   }
   $: yTicks = generateYTicks(maxFrequency,maxFrequency / 4);
+
   //create scale
 	$: xScale = scaleBand()
   .domain(['Hillary', 'Trump'])
@@ -44,10 +54,9 @@
 				</g>
 			{/each}
 		</g>
-
 		<g class="axis x-axis">
       {#each ['Hillary', 'Trump'] as category}
-        <g class="tick" transform="translate({xScale(category) + (category == "Hillary"? xScale.bandwidth() /2:35)}, {height-10})">
+        <g class="tick" transform="translate({xScale(category) + (category == "Hillary"? xScale.bandwidth() /2.:35)}, {height-10})">
           <text>{category}</text>
         </g>
       {/each}
@@ -58,7 +67,7 @@
 		<g class="bars">
       {#each combinedData as {Frequency, category }, i}
         <rect
-          x={xScale(category) + (category == "Hillary"? xScale.bandwidth() /3:6)}
+          x={xScale(category) + (category == "Hillary"? xScale.bandwidth() /4:6)}
           y={yScale(Frequency)}
           width={xScale.bandwidth() / 2}
           height={yScale(0) - yScale(Frequency)}
