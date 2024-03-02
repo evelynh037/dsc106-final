@@ -1,5 +1,5 @@
 <script>
-  import Scroller from "@sveltejs/svelte-scroller";
+  import Scroller from '@sveltejs/svelte-scroller';
   import { onMount } from 'svelte';
   import * as d3 from 'd3';
   import Graph from "./Graph.svelte";
