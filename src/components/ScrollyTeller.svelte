@@ -42,6 +42,10 @@
   });
   //suggest words
   function handleClick(word) {
+   prefix = word;
+   inputText = word;
+  }
+  /*function handleClick(word) {
   if (selected.length <3 &&  (!(selected.includes(word)))){
     prefix = word;
     inputText = word;
@@ -58,7 +62,7 @@
     selected_length-=1;
     selected = selected_word;
     inputText = "";
-  }
+  }*/
   //get frequency for input word
   $: filtered_hillary = hillaryData.filter((d) => d.Word == prefix.toLowerCase());
   $: filtered_trump = trumpData.filter((d) => d.Word == prefix.toLowerCase());
@@ -108,13 +112,11 @@
         <section class="centered-content">
           <div>
             <div class="centered-content">
+            <p>Now that you have some idea about which topics each candidate spent more focus on. For instance, Clinton takes advantage of her identity and mentioned gender issue with words like "women" three times more than Trump to win supports from general publics with same identity.</p>
             <p>Type in a word to see how many time it appears in each nominees' tweet</p>
             <p>Remember, the frequency is out of ~3000 tweets for each of them. And is counting how many tweets contained the word of your choice </p>
             <p>Take your time to explore the topic you want! </p>
-            <p>You've selected: </p>
-            {#each selected_word as word}
-            <button class="button-53" on:click={() => handleDelete(word)}>{word}</button>
-            {/each}
+            
             <br>
             <div class="input-container">
               <input type="text" bind:value={inputText} placeholder="Type in a word" />
@@ -122,12 +124,7 @@
             {#if if_empty}
               <p>Try different word!</p>
             {/if}
-            {#if selected_length == 3}
-              <p>You have already choose three words. Let's explore the graph </p>
-            {/if}
-            {#if is_there == true && selected.includes(inputText)}
-              <p>You already selected this, try different one! </p>
-            {/if}
+        
             {#if selected_length != 3}
             <div class="suggestions">
               {#each top_five_words as word}
